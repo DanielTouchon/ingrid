@@ -181,6 +181,19 @@
         /* POEMA */
         .poema {
             background-color: #FFF3E6;
+            position: relative;
+        }
+
+        .poema-image {
+            position: absolute;
+            left: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.2);
         }
 
         .poema-texto {
@@ -489,6 +502,7 @@
 
     <!-- SEÇÃO 2: POEMA -->
     <section class="poema">
+        <img src="images/image0.jpg" alt="Ingrid" class="poema-image">
         <div class="content observe">
             <h2>Poema para você</h2>
             <div class="poema-texto">
