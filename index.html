@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para minha cor preferida</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #FFF3E6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Animações */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fall {
+            0% {
+                top: -20px;
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                top: 100vh;
+                opacity: 0;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .falling-element {
+            position: fixed;
+            pointer-events: none;
+            font-size: 2rem;
+            z-index: 1;
+        }
+
+        .element1 { animation: fall 8s linear infinite; left: 10%; --delay: 0s; }
+        .element2 { animation: fall 10s linear infinite; left: 20%; --delay: 2s; animation-delay: var(--delay); }
+        .element3 { animation: fall 12s linear infinite; left: 30%; --delay: 4s; animation-delay: var(--delay); }
+        .element4 { animation: fall 9s linear infinite; left: 40%; --delay: 1s; animation-delay: var(--delay); }
+        .element5 { animation: fall 11s linear infinite; left: 50%; --delay: 3s; animation-delay: var(--delay); }
+        .element6 { animation: fall 10s linear infinite; left: 60%; --delay: 5s; animation-delay: var(--delay); }
+        .element7 { animation: fall 9s linear infinite; left: 70%; --delay: 2s; animation-delay: var(--delay); }
+        .element8 { animation: fall 11s linear infinite; left: 80%; --delay: 4s; animation-delay: var(--delay); }
+        .element9 { animation: fall 12s linear infinite; left: 90%; --delay: 1s; animation-delay: var(--delay); }
+
+        /* Seções */
+        section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 2rem;
+            scroll-behavior: smooth;
+        }
+
+        .content {
+            max-width: 650px;
+            width: 100%;
+        }
+
+        h1 {
+            font-family: 'Georgia', serif;
+            font-size: 2.5rem;
+            color: #8B4513;
+            text-align: center;
+            margin-bottom: 0.8rem;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            font-family: 'Georgia', serif;
+            font-size: 2rem;
+            color: #E67E22;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+        }
+
+        h3 {
+            font-family: 'Georgia', serif;
+            font-size: 1.5rem;
+            color: #8B4513;
+            text-align: center;
+            margin-bottom: 1rem;
+            font-weight: 400;
+        }
+
+        p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #555;
+            text-align: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .subtitle {
+            font-family: 'Georgia', serif;
+            font-size: 1.2rem;
+            color: #E67E22;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-weight: 300;
+            font-style: italic;
+        }
+
+        /* CAPA */
+        .capa {
+            background: linear-gradient(135deg, #FFF3E6 0%, #FFF8F0 100%);
+        }
+
+        .flower {
+            font-size: 5rem;
+            text-align: center;
+            margin: 1.5rem 0;
+            display: block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 1rem 2rem;
+            background-color: #E67E22;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-family: 'Georgia', serif;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+        }
+
+        .button:hover {
+            background-color: #D35400;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(230, 126, 34, 0.4);
+        }
+
+        .button:active {
+            transform: translateY(-1px);
+        }
+
+        /* POEMA */
+        .poema {
+            background-color: #FFF3E6;
+        }
+
+        .poema-texto {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #666;
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            font-family: 'Georgia', serif;
+        }
+
+        .poema-verso {
+            margin-bottom: 0.8rem;
+        }
+
+        /* MÚSICA */
+        .musica {
+            background: linear-gradient(135deg, #FFF3E6 0%, #FFF0E6 100%);
+        }
+
+        .music-container {
+            text-align: center;
+        }
+
+        .music-text {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .audio-player {
+            background-color: white;
+            border-radius: 50px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(230, 126, 34, 0.2);
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        audio {
+            flex: 1;
+            min-width: 250px;
+            height: 50px;
+            accent-color: #E67E22;
+        }
+
+        /* CARROSSEL */
+        .galeria {
+            background-color: #FFF3E6;
+            flex-direction: column;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(230, 126, 34, 0.2);
+        }
+
+        .carousel {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            width: 100%;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f5f5f5;
+            aspect-ratio: 3/2;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .carousel-controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .carousel-button {
+            background-color: #E67E22;
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-button:hover {
+            background-color: #D35400;
+            transform: scale(1.1);
+        }
+
+        .carousel-indicators {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #ddd;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .indicator.active {
+            background-color: #E67E22;
+            width: 30px;
+            border-radius: 5px;
+        }
+
+        .carousel-title {
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* FINAL */
+        .final {
+            background-color: #FFF3E6;
+            flex-direction: column;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+            width: 100%;
+        }
+
+        .card {
+            background-color: white;
+            border-left: 5px solid #E67E22;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(230, 126, 34, 0.25);
+        }
+
+        .card h4 {
+            font-family: 'Georgia', serif;
+            font-size: 1.3rem;
+            color: #8B4513;
+            margin-bottom: 1rem;
+            font-weight: 400;
+        }
+
+        .card p {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        .final-message {
+            font-family: 'Georgia', serif;
+            font-size: 2rem;
+            color: #E67E22;
+            text-align: center;
+            margin-top: 2rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            h3 {
+                font-size: 1.3rem;
+            }
+
+            .flower {
+                font-size: 5rem;
+            }
+
+            .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .poema-texto {
+                font-size: 1rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+
+            .cards-container {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .final-message {
+                font-size: 1.8rem;
+            }
+
+            section {
+                min-height: auto;
+                padding: 2rem 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+            }
+
+            .flower {
+                font-size: 3.5rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .button {
+                padding: 0.8rem 1.5rem;
+                font-size: 0.9rem;
+            }
+
+            .final-message {
+                font-size: 1.4rem;
+            }
+
+            audio {
+                min-width: 200px;
+            }
+        }
+
+
+        /* Elemento observe para fade-in */
+        .observe {
+            opacity: 0;
+        }
+
+        .observe.visible {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- Elementos caindo de forma aleatória -->
+    <div class="falling-element element1">🍂</div>
+    <div class="falling-element element2">❤️</div>
+    <div class="falling-element element3">🍂</div>
+    <div class="falling-element element4">❤️</div>
+    <div class="falling-element element5">🍂</div>
+    <div class="falling-element element6">❤️</div>
+    <div class="falling-element element7">🍂</div>
+    <div class="falling-element element8">❤️</div>
+    <div class="falling-element element9">🍂</div>
+
+    <!-- SEÇÃO 1: CAPA -->
+    <section class="capa">
+        <div class="content observe">
+            <h1>Para minha cor preferida</h1>
+            <p class="subtitle">Para Ingrid</p>
+            <span class="flower">🧡</span>
+            <div style="text-align: center;">
+                <button class="button" onclick="scrollToSection(1)">Abra ↓</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 2: POEMA -->
+    <section class="poema">
+        <div class="content observe">
+            <h2>Poema para você</h2>
+            <div class="poema-texto">
+                <div class="poema-verso">Se me perguntarem qual é a minha cor preferida,<br/>eu não vou falar laranja.</div>
+                <div class="poema-verso">Vou falar Ingrid.</div>
+                <div style="margin: 2rem 0;"></div>
+                <div class="poema-verso">Você é da cor dessa flor, sabe?<br/>Esse laranja que não é só laranja,<br/>é sol de verão com cheirinho de outono.<br/>É quente, mas aconchega.</div>
+                <div style="margin: 2rem 0;"></div>
+                <div class="poema-verso">Você tem energia de fim de tarde,<br/>daquelas que a gente não quer que acabe.<br/>Meio verão, porque você ilumina tudo,<br/>meio outono, porque do seu lado eu tenho paz.</div>
+                <div style="margin: 2rem 0;"></div>
+                <div class="poema-verso">Se o mundo fosse preto e branco,<br/>você ainda ia ser a minha cor preferida.</div>
+            </div>
+            <div style="text-align: center; margin-top: 3rem;">
+                <button class="button" onclick="scrollToSection(2)">Próximo ↓</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Áudio toca automaticamente ao abrir -->
+    <audio id="musicPlayer" autoplay>
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- SEÇÃO 3: GALERIA/CARROSSEL -->
+    <section class="galeria">
+        <div class="content observe">
+            <h2>Nossas memórias</h2>
+            <p class="carousel-title">Alguns momentos que você ilumina 📸</p>
+
+            <div class="carousel-container">
+                <div class="carousel" id="carousel">
+                    <!-- Slides serão carregados dinamicamente -->
+                </div>
+            </div>
+
+            <div class="carousel-controls">
+                <button class="carousel-button" onclick="prevSlide()">❮</button>
+                <div class="carousel-indicators" id="indicators">
+                    <!-- Indicadores serão carregados dinamicamente -->
+                </div>
+                <button class="carousel-button" onclick="nextSlide()">❯</button>
+            </div>
+            <div style="text-align: center; margin-top: 3rem;">
+                <button class="button" onclick="scrollToSection(3)">Próximo ↓</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 4: FINAL -->
+    <section class="final">
+        <div class="content observe">
+            <h2>Você é...</h2>
+
+            <div class="cards-container">
+                <div class="card observe">
+                    <h4>Meio verão</h4>
+                    <p>Porque você ilumina tudo ao seu redor. Sua presença é como um raio de sol que aquece e alegra.</p>
+                </div>
+
+                <div class="card observe">
+                    <h4>Meio outono</h4>
+                    <p>Porque do seu lado eu tenho paz. Um aconchego, uma sensação de estar em casa que só você me dá.</p>
+                </div>
+
+                <div class="card observe">
+                    <h4>Toda minha</h4>
+                    <p>E minha cor preferida pra sempre. Não há nada no mundo que eu ame mais do que você.</p>
+                </div>
+            </div>
+
+            <p class="final-message">Te amo, Ingrid. 🧡</p>
+        </div>
+    </section>
+
+    <script>
+        // Intersection Observer para fade-in ao rolar
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observar todos os elementos com classe 'observe'
+        document.querySelectorAll('.observe').forEach(element => {
+            observer.observe(element);
+        });
+
+        // Suavizar o scroll quando clicar em links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Tocar música automaticamente
+        const musicPlayer = document.getElementById('musicPlayer');
+
+        // Tentar tocar assim que o documento carregar
+        window.addEventListener('load', () => {
+            musicPlayer.play().catch(() => {
+                // Se falhar (navegador bloqueou autoplay), toca na primeira interação
+                document.addEventListener('click', () => {
+                    musicPlayer.play();
+                }, { once: true });
+            });
+        });
+
+        // CARROSSEL
+        let currentSlide = 0;
+        let slides = [];
+
+        // Carregar imagens da pasta images
+        function loadCarousel() {
+            const carousel = document.getElementById('carousel');
+            const indicators = document.getElementById('indicators');
+
+            // Array de nomes de imagens que esperamos encontrar
+            // Você pode adicionar mais ou ajustar os nomes conforme necessário
+            const imageNames = [];
+
+            // Tentar carregar imagens image1, image2, image3, etc.
+            for (let i = 1; i <= 10; i++) {
+                imageNames.push(`image${i}`);
+            }
+
+            // Testar cada imagem e criar slides para as que existem
+            let loadedCount = 0;
+
+            imageNames.forEach((name, index) => {
+                const extensions = ['jpg', 'jpeg', 'png', 'webp'];
+
+                extensions.forEach(ext => {
+                    const img = new Image();
+                    const src = `images/${name}.${ext}`;
+
+                    img.onload = function() {
+                        if (!slides.some(s => s === src)) {
+                            slides.push(src);
+                            loadedCount++;
+                            renderCarousel();
+                        }
+                    };
+
+                    img.onerror = function() {
+                        // Imagem não encontrada, continua
+                    };
+
+                    img.src = src;
+                });
+            });
+
+            // Se nenhuma imagem for encontrada, mostrar mensagem
+            setTimeout(() => {
+                if (slides.length === 0) {
+                    carousel.innerHTML = '<div class="carousel-slide" style="font-size: 1rem; color: #999;">Nenhuma imagem encontrada na pasta "images"</div>';
+                }
+            }, 2000);
+        }
+
+        function renderCarousel() {
+            const carousel = document.getElementById('carousel');
+            const indicators = document.getElementById('indicators');
+
+            // Limpar e reconstruir
+            carousel.innerHTML = '';
+            indicators.innerHTML = '';
+
+            slides.forEach((src, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'carousel-slide';
+                slide.innerHTML = `<img src="${src}" alt="Memória ${index + 1}">`;
+                carousel.appendChild(slide);
+
+                const indicator = document.createElement('div');
+                indicator.className = `indicator ${index === 0 ? 'active' : ''}`;
+                indicator.onclick = () => goToSlide(index);
+                indicators.appendChild(indicator);
+            });
+
+            updateCarousel();
+        }
+
+        function updateCarousel() {
+            if (slides.length === 0) return;
+
+            const carousel = document.getElementById('carousel');
+            const offset = -currentSlide * 100;
+            carousel.style.transform = `translateX(${offset}%)`;
+
+            // Atualizar indicadores
+            document.querySelectorAll('.indicator').forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        function nextSlide() {
+            if (slides.length === 0) return;
+            currentSlide = (currentSlide + 1) % slides.length;
+            updateCarousel();
+        }
+
+        function prevSlide() {
+            if (slides.length === 0) return;
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            updateCarousel();
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateCarousel();
+        }
+
+        // Carregar carrossel quando a página carregar
+        window.addEventListener('load', loadCarousel);
+
+        // Função para scroll suave entre seções
+        function scrollToSection(index) {
+            const sections = document.querySelectorAll('section');
+            if (sections[index]) {
+                sections[index].scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+    </script>
+</body>
+</html>
