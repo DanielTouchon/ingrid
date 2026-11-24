@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingrid FM - Quando você tem saudade</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FFF3E6 0%, #FFF8F0 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .title {
+            font-size: 2rem;
+            color: #E67E22;
+            text-align: center;
+            font-weight: 300;
+            letter-spacing: 2px;
+            font-family: 'Georgia', serif;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.15);
+            }
+        }
+
+        @keyframes heartBeat {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(var(--tx));
+                opacity: 0;
+            }
+        }
+
+        .button-container {
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .big-button {
+            width: 100%;
+            max-width: 300px;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #E67E22 0%, #D35400 100%);
+            border: none;
+            cursor: pointer;
+            font-size: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 40px rgba(230, 126, 34, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .big-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 50px rgba(230, 126, 34, 0.6);
+        }
+
+        .big-button:active {
+            transform: scale(0.98);
+        }
+
+        .heart-icon {
+            animation: heartBeat 1.5s ease-in-out infinite;
+        }
+
+        .message-box {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(230, 126, 34, 0.3);
+            max-width: 320px;
+            text-align: center;
+            z-index: 100;
+            animation: showMessage 0.5s ease-out forwards;
+            border: 3px solid #E67E22;
+        }
+
+        @keyframes showMessage {
+            0% {
+                transform: translate(-50%, -50%) scale(0) rotateY(90deg);
+                opacity: 0;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.1) rotateY(0deg);
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1) rotateY(0deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes hideMessage {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(0) rotateY(-90deg);
+                opacity: 0;
+            }
+        }
+
+        .message-box.hide {
+            animation: hideMessage 0.4s ease-in forwards;
+        }
+
+        .message-text {
+            font-size: 1.3rem;
+            color: #333;
+            line-height: 1.8;
+            font-family: 'Georgia', serif;
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+
+        .message-heart {
+            font-size: 2rem;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .counter {
+            margin-top: 2rem;
+            font-size: 1.1rem;
+            color: #666;
+            text-align: center;
+            line-height: 1.8;
+        }
+
+        .counter-number {
+            font-weight: bold;
+            color: #E67E22;
+            font-size: 1.3rem;
+        }
+
+        .button-text {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .button-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: white;
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 600px) {
+            .title {
+                font-size: 1.5rem;
+            }
+
+            .big-button {
+                max-width: 250px;
+                font-size: 2rem;
+            }
+
+            .button-label {
+                font-size: 0.65rem;
+            }
+
+            .message-text {
+                font-size: 1.1rem;
+            }
+
+            .counter {
+                font-size: 1rem;
+            }
+
+            .message-box {
+                max-width: 280px;
+                padding: 1.5rem;
+            }
+        }
+
+        /* Floating hearts */
+        .floating-heart {
+            position: fixed;
+            pointer-events: none;
+            font-size: 1.5rem;
+            animation: floatHeart 3s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Ingrid FM 🧡</h1>
+
+        <div class="button-container">
+            <button class="big-button" onclick="handleButtonClick()">
+                <div class="button-text">
+                    <span class="button-label">Aperta quando</span>
+                    <span class="button-label">tiver com</span>
+                    <span class="button-label">saudade</span>
+                    <span class="heart-icon">❤️</span>
+                </div>
+            </button>
+        </div>
+
+        <div class="counter">
+            <p>Você já apertou <span class="counter-number" id="clickCount">0</span> vezes.</p>
+            <p>Eu senti saudade <span class="counter-number" id="missCount">0</span> vezes também. 💔</p>
+        </div>
+    </div>
+
+    <div class="message-box" id="messageBox">
+        <div class="message-text" id="messageText"></div>
+        <div class="message-heart">💚</div>
+    </div>
+
+    <script>
+        const messages = [
+            "Eu também tô com saudade. Juro.",
+            "Te amo, minha cor preferida.",
+            "Você é o sol que esquenta e ilumina tudo.",
+            "Você é o cheirinho que inebria.",
+            "Você é a energia que contagia tudo e todos que toca.",
+            "Faltam poucos dias pra gente se ver e eu já tô contando.",
+            "Se eu estivesse aí agora, eu ia te abraçar e não soltar.",
+            "Você tá pensando em mim? Porque eu tô pensando em você.",
+            "Aperta de novo. Eu gosto quando você aperta.",
+            "Você é meio verão, meio outono, e toda minha.",
+            "Hoje eu vi uma coisa laranja e lembrei de você na hora.",
+            "Você é a minha rádio favorita. Só toca pra você.",
+            "Eu te amo mais do que ontem e menos do que amanhã.",
+            "Vai, me manda um áudio. Quero ouvir sua voz.",
+            "Você é a melhor parte do meu dia, mesmo de longe."
+        ];
+
+        let usedMessages = [];
+        let availableMessages = [...messages];
+        let clickCount = localStorage.getItem('ingridFmClicks') || 0;
+        let messageBox = document.getElementById('messageBox');
+        let messageText = document.getElementById('messageText');
+
+        // Inicializar contadores
+        updateCounters();
+
+        function updateCounters() {
+            clickCount = parseInt(localStorage.getItem('ingridFmClicks') || 0);
+            document.getElementById('clickCount').textContent = clickCount;
+            document.getElementById('missCount').textContent = clickCount;
+        }
+
+        function getRandomMessage() {
+            if (availableMessages.length === 0) {
+                // Reset quando acabar todas as mensagens
+                availableMessages = [...messages];
+            }
+
+            const randomIndex = Math.floor(Math.random() * availableMessages.length);
+            const message = availableMessages[randomIndex];
+
+            // Remove da lista de disponíveis
+            availableMessages.splice(randomIndex, 1);
+            usedMessages.push(message);
+
+            return message;
+        }
+
+        function createFloatingHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.textContent = '❤️';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.top = '50%';
+            heart.style.setProperty('--tx', (Math.random() - 0.5) * 200 + 'px');
+            document.body.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 3000);
+        }
+
+        function showMessage(text) {
+            messageBox.classList.remove('hide');
+            messageText.textContent = text;
+
+            // Criar corações flutuantes
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => createFloatingHeart(), i * 100);
+            }
+
+            // Fechar mensagem após 3 segundos
+            setTimeout(() => {
+                messageBox.classList.add('hide');
+            }, 3000);
+        }
+
+        function handleButtonClick() {
+            clickCount++;
+            localStorage.setItem('ingridFmClicks', clickCount);
+            updateCounters();
+
+            const message = getRandomMessage();
+            showMessage(message);
+        }
+
+        // Fechar mensagem ao clicar fora
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'messageBox' || e.target.id === 'messageText' || e.target.id === 'messageBox' || e.target.closest('#messageBox')) {
+                messageBox.classList.add('hide');
+            }
+        });
+    </script>
+</body>
+</html>
