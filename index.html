@@ -564,6 +564,100 @@
             margin-top: 1rem;
         }
 
+        /* QUIZ */
+        .quiz {
+            background-color: #FFF3E6;
+            flex-direction: column;
+        }
+
+        .quiz-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2.5rem;
+            width: 100%;
+        }
+
+        .quiz-question {
+            font-family: 'Georgia', serif;
+            font-size: 2.2rem;
+            color: #8B4513;
+            text-align: center;
+            line-height: 1.4;
+            margin: 2rem 0;
+        }
+
+        .quiz-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .quiz-button {
+            padding: 1rem 2rem;
+            background-color: #E67E22;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-family: 'Georgia', serif;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+            min-width: 150px;
+        }
+
+        .quiz-button:hover {
+            background-color: #D35400;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(230, 126, 34, 0.4);
+        }
+
+        .quiz-button:active {
+            transform: translateY(-1px);
+        }
+
+        .quiz-button.secondary {
+            background-color: #8B4513;
+        }
+
+        .quiz-button.secondary:hover {
+            background-color: #6B3410;
+        }
+
+        .quiz-end-screen {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .quiz-end-screen h3 {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+        }
+
+        .quiz-score-message {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .quiz-question {
+                font-size: 1.6rem;
+            }
+
+            .quiz-buttons {
+                flex-direction: column;
+            }
+
+            .quiz-button {
+                width: 100%;
+            }
+        }
+
         /* FINAL */
         .final {
             background-color: #FFF3E6;
@@ -803,15 +897,27 @@
     <!-- SEÇÃO 5: QUIZ -->
     <section class="quiz">
         <div class="content observe">
-            <h2>Quiz de Nós</h2>
-            <p style="margin-bottom: 2rem; font-style: italic;">Vamos jogar em ligação? 💕</p>
+            <h2>Quiz Pra Gente Jogar</h2>
+            <p style="margin-bottom: 2rem; font-style: italic;">Responde na ligação! 😄</p>
 
-            <div class="quiz-container" id="quizContainer">
-                <div class="quiz-question" id="quizQuestion"></div>
-                <div class="quiz-options" id="quizOptions"></div>
-                <div id="quizExplanation"></div>
-                <button class="button quiz-next-button" id="nextButton" onclick="nextQuestion()" style="display: none;">Próxima pergunta</button>
-                <div class="quiz-progress" id="quizProgress"></div>
+            <div class="quiz-container">
+                <div id="quizStart" class="quiz-start">
+                    <p style="font-size: 1.1rem; color: #666; margin-bottom: 2rem;">Cada um abre no seu dispositivo e jogam por ligação.</p>
+                    <button class="quiz-button" onclick="startQuiz()">Começar Quiz</button>
+                </div>
+
+                <div id="quizGame" class="quiz-game" style="display: none; width: 100%;">
+                    <div class="quiz-question" id="questionText"></div>
+                    <div class="quiz-buttons">
+                        <button class="quiz-button" onclick="nextQuestion()">Próxima Pergunta →</button>
+                    </div>
+                </div>
+
+                <div id="quizEnd" class="quiz-end-screen" style="display: none;">
+                    <h3>🎉 Acabaram as perguntas!</h3>
+                    <p class="quiz-score-message">Queremos jogar de novo?</p>
+                    <button class="quiz-button" onclick="startQuiz()">Jogar de Novo</button>
+                </div>
             </div>
         </div>
         <div style="text-align: center; margin-top: 2rem;">
@@ -1076,126 +1182,64 @@
         // Inicializar contador ao carregar
         window.addEventListener('load', initMissCounter);
 
-        // QUIZ
+        // QUIZ - Pra Jogar em Ligação
         const quizQuestions = [
-            {
-                pergunta: "Qual é a cor preferida da Ingrid?",
-                opcoes: ["Laranja", "Azul", "Verde", "Rosa"],
-                resposta: 0,
-                explicacao: "Óbvio. A cor do sol."
-            },
-            {
-                pergunta: "Qual é o apelido que o Daniel mais usa pra Ingrid?",
-                opcoes: ["Sol", "Vida", "Amor", "Flor"],
-                resposta: 0,
-                explicacao: "Porque ela esquenta e ilumina tudo."
-            },
-            {
-                pergunta: "O que a Ingrid mais gosta de comer quando tá com o Daniel?",
-                opcoes: ["Manga", "Pizza", "Açaí", "Hambúrguer"],
-                resposta: 0,
-                explicacao: "Ela sempre fala que tá bom e ele não acredita."
-            },
-            {
-                pergunta: "Qual estação a Ingrid mais parece?",
-                opcoes: ["Verão", "Inverno", "Outono", "Primavera"],
-                resposta: 0,
-                explicacao: "Ela é meio verão, meio outono."
-            },
-            {
-                pergunta: "Onde foi a primeira foto deles juntos?",
-                opcoes: ["Na praia", "Na casa dela", "Em Niterói", "No parque"],
-                resposta: 2,
-                explicacao: "Niterói marca o começo da história de vocês."
-            }
+            "Quem é mais provável de chorar vendo um filme?",
+            "Quem faz mais drama quando tá com fome?",
+            "Quem é mais provável de dormir no meio do filme?",
+            "Quem demora mais pra se arrumar?",
+            "Quem é mais provável de esquecer o aniversário do outro?",
+            "Quem manda mais mensagem primeiro?",
+            "Quem é mais ciumento?",
+            "Quem come mais manga?",
+            "Quem é mais provável de rir na hora errada?",
+            "Quem é mais provável de pedir desculpa primeiro depois da briga?",
+            "Quem é mais provável de cantar no chuveiro?",
+            "Quem é mais provável de ficar com saudade primeiro?",
+            "Quem é mais provável de gastar tudo com besteira?",
+            "Quem é mais bagunceiro?",
+            "Quem é mais provável de falar 'te amo' primeiro?"
         ];
 
+        let shuffledQuestions = [];
         let currentQuestionIndex = 0;
-        let answered = false;
 
-        function initQuiz() {
+        function shuffleQuestions() {
+            shuffledQuestions = [...quizQuestions].sort(() => Math.random() - 0.5);
             currentQuestionIndex = 0;
-            answered = false;
+        }
+
+        function startQuiz() {
+            shuffleQuestions();
+            document.getElementById('quizStart').style.display = 'none';
+            document.getElementById('quizEnd').style.display = 'none';
+            document.getElementById('quizGame').style.display = 'block';
             showQuestion();
         }
 
         function showQuestion() {
-            if (currentQuestionIndex >= quizQuestions.length) {
-                showFinish();
+            if (currentQuestionIndex >= shuffledQuestions.length) {
+                endQuiz();
                 return;
             }
 
-            const question = quizQuestions[currentQuestionIndex];
-            answered = false;
-
-            // Mostrar pergunta
-            document.getElementById('quizQuestion').innerHTML = question.pergunta;
-
-            // Mostrar opções
-            const optionsContainer = document.getElementById('quizOptions');
-            optionsContainer.innerHTML = '';
-
-            question.opcoes.forEach((opcao, index) => {
-                const button = document.createElement('button');
-                button.className = 'quiz-option';
-                button.textContent = opcao;
-                button.onclick = () => answerQuestion(index, question.resposta, question.explicacao);
-                optionsContainer.appendChild(button);
-            });
-
-            // Limpar explicação
-            document.getElementById('quizExplanation').innerHTML = '';
-            document.getElementById('nextButton').style.display = 'none';
-
-            // Mostrar progresso
-            document.getElementById('quizProgress').textContent = `Pergunta ${currentQuestionIndex + 1} de ${quizQuestions.length}`;
-        }
-
-        function answerQuestion(selected, correct, explanation) {
-            if (answered) return;
-            answered = true;
-
-            const options = document.querySelectorAll('.quiz-option');
-
-            // Desabilitar todos os botões
-            options.forEach(btn => btn.disabled = true);
-
-            // Mostrar resposta correta e incorreta
-            options.forEach((btn, index) => {
-                if (index === correct) {
-                    btn.classList.add('correct');
-                } else if (index === selected && index !== correct) {
-                    btn.classList.add('incorrect');
-                }
-            });
-
-            // Mostrar explicação
-            const explanationDiv = document.getElementById('quizExplanation');
-            explanationDiv.innerHTML = `<div class="quiz-explanation">${explanation}</div>`;
-
-            // Mostrar botão próxima
-            document.getElementById('nextButton').style.display = 'block';
+            const question = shuffledQuestions[currentQuestionIndex];
+            document.getElementById('questionText').textContent = question;
         }
 
         function nextQuestion() {
             currentQuestionIndex++;
-            showQuestion();
+            if (currentQuestionIndex >= shuffledQuestions.length) {
+                endQuiz();
+            } else {
+                showQuestion();
+            }
         }
 
-        function showFinish() {
-            const container = document.getElementById('quizContainer');
-            container.innerHTML = `
-                <div class="quiz-finish">
-                    <h3>Vocês terminaram! 🎉</h3>
-                    <p style="font-size: 1.3rem; color: #E67E22; font-style: italic;">Agora vocês podem comparar as respostas por ligação e descobrir quem acertou mais!</p>
-                    <p>Mas o importante é que vocês fizeram isso juntos. 💕</p>
-                    <button class="button" onclick="initQuiz()" style="margin-top: 1.5rem;">Jogar novamente</button>
-                </div>
-            `;
+        function endQuiz() {
+            document.getElementById('quizGame').style.display = 'none';
+            document.getElementById('quizEnd').style.display = 'block';
         }
-
-        // Inicializar quiz quando a página carregar
-        window.addEventListener('load', initQuiz);
 
         // Função para scroll suave entre seções
         function scrollToSection(index) {
