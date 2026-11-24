@@ -337,6 +337,128 @@
             font-style: italic;
         }
 
+        /* SAUDADE */
+        .saudade {
+            background-color: #FFF3E6;
+            flex-direction: column;
+        }
+
+        .saudade-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .miss-button {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background-color: #E67E22;
+            border: none;
+            font-size: 4rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(230, 126, 34, 0.3);
+            animation: heartbeat 1.2s infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .miss-button:hover {
+            background-color: #D35400;
+            transform: scale(1.05);
+            box-shadow: 0 12px 35px rgba(230, 126, 34, 0.4);
+        }
+
+        .miss-button:active {
+            transform: scale(0.95);
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            25% {
+                transform: scale(1.1);
+            }
+            50% {
+                transform: scale(1);
+            }
+        }
+
+        .message-balloon {
+            background-color: white;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 400px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-style: italic;
+            color: #8B4513;
+            box-shadow: 0 8px 30px rgba(230, 126, 34, 0.2);
+            animation: balloonAppear 0.6s ease-out;
+            position: relative;
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+        }
+
+        .message-balloon::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 30%;
+            width: 30px;
+            height: 30px;
+            background-color: white;
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.1);
+        }
+
+        @keyframes balloonAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.5) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .miss-counter {
+            font-size: 1rem;
+            color: #666;
+            text-align: center;
+            margin-top: 1rem;
+            font-style: italic;
+        }
+
+        .miss-counter strong {
+            color: #E67E22;
+            font-size: 1.2rem;
+        }
+
+        .falling-heart {
+            position: fixed;
+            font-size: 1.5rem;
+            pointer-events: none;
+            animation: heartFall 2s ease-in forwards;
+            z-index: 50;
+        }
+
+        @keyframes heartFall {
+            0% {
+                opacity: 1;
+                transform: translateY(0) translateX(0) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(500px) translateX(100px) rotate(360deg);
+            }
+        }
+
         /* FINAL */
         .final {
             background-color: #FFF3E6;
@@ -551,7 +673,29 @@
         </div>
     </section>
 
-    <!-- SEÇÃO 4: FINAL -->
+    <!-- SEÇÃO 4: SAUDADE -->
+    <section class="saudade">
+        <div class="content observe">
+            <h2>Quando tiver com saudade</h2>
+            <p style="margin-bottom: 2rem; font-style: italic;">Aperta aqui e eu sinto 💕</p>
+
+            <div class="saudade-container">
+                <button class="miss-button" onclick="showMissageMessage()">❤️</button>
+
+                <div id="messageContainer"></div>
+
+                <div class="miss-counter">
+                    Você já apertou <strong id="clickCount">0</strong> vezes.<br>
+                    Eu senti saudade <strong id="feelCount">0</strong> vezes também.
+                </div>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 2rem;">
+            <button class="button" onclick="scrollToSection(4)">Próximo ↓</button>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 5: FINAL -->
     <section class="final">
         <div class="content observe">
             <h2>Você é...</h2>
@@ -728,6 +872,85 @@
 
         // Carregar carrossel quando a página carregar
         window.addEventListener('load', loadCarousel);
+
+        // SAUDADE - Mensagens de Saudade
+        const missMessages = [
+            "Eu também tô com saudade. Juro.",
+            "Te amo, minha cor preferida.",
+            "Você é o sol que esquenta e ilumina tudo.",
+            "Você é o cheiro que inebria.",
+            "Você é a energia que contagia tudo e todos que toca.",
+            "Faltam poucos dias pra gente se ver e eu já tô contando.",
+            "Se eu estivesse aí agora, eu ia te abraçar e não soltar.",
+            "Você tá pensando em mim? Porque eu tô pensando em você.",
+            "Aperta de novo. Eu gosto quando você aperta.",
+            "Você é meio verão, meio outono, e toda minha.",
+            "Hoje eu vi uma coisa laranja e lembrei de você na hora.",
+            "Você é a minha rádio favorita. Só toca pra você.",
+            "Eu te amo mais do que ontem e menos do que amanhã.",
+            "Vai, me manda um áudio. Quero ouvir sua voz.",
+            "Você é a melhor parte do meu dia, mesmo de longe."
+        ];
+
+        let usedMessages = [];
+        let clickCount = 0;
+
+        function initMissCounter() {
+            clickCount = parseInt(localStorage.getItem('missClicks') || '0');
+            document.getElementById('clickCount').textContent = clickCount;
+            document.getElementById('feelCount').textContent = clickCount;
+        }
+
+        function showMissageMessage() {
+            clickCount++;
+            localStorage.setItem('missClicks', clickCount);
+            document.getElementById('clickCount').textContent = clickCount;
+            document.getElementById('feelCount').textContent = clickCount;
+
+            // Encontrar próxima mensagem
+            if (usedMessages.length === missMessages.length) {
+                usedMessages = [];
+            }
+
+            let availableMessages = missMessages.filter(msg => !usedMessages.includes(msg));
+            const message = availableMessages[Math.floor(Math.random() * availableMessages.length)];
+            usedMessages.push(message);
+
+            // Mostrar balão
+            const container = document.getElementById('messageContainer');
+            container.innerHTML = `<div class="message-balloon">${message}</div>`;
+
+            // Explodir corações
+            createHeartExplosion();
+        }
+
+        function createHeartExplosion() {
+            const container = document.getElementById('messageContainer');
+            const rect = container.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            for (let i = 0; i < 12; i++) {
+                const heart = document.createElement('div');
+                heart.textContent = '❤️';
+                heart.className = 'falling-heart';
+
+                const angle = (i / 12) * Math.PI * 2;
+                const velocity = 100 + Math.random() * 100;
+
+                heart.style.left = centerX + 'px';
+                heart.style.top = centerY + 'px';
+                heart.style.setProperty('--vx', Math.cos(angle) * velocity);
+                heart.style.setProperty('--vy', Math.sin(angle) * velocity - 50);
+
+                document.body.appendChild(heart);
+
+                setTimeout(() => heart.remove(), 2000);
+            }
+        }
+
+        // Inicializar contador ao carregar
+        window.addEventListener('load', initMissCounter);
 
         // Função para scroll suave entre seções
         function scrollToSection(index) {
