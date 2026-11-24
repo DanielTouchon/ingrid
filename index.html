@@ -459,6 +459,111 @@
             }
         }
 
+        /* QUIZ */
+        .quiz {
+            background-color: #FFF3E6;
+            flex-direction: column;
+        }
+
+        .quiz-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            width: 100%;
+            max-width: 700px;
+        }
+
+        .quiz-question {
+            font-family: 'Georgia', serif;
+            font-size: 1.8rem;
+            color: #8B4513;
+            text-align: center;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .quiz-option {
+            padding: 1.2rem;
+            background-color: white;
+            border: 3px solid #E67E22;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .quiz-option:hover:not(:disabled) {
+            background-color: #FFF8F0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(230, 126, 34, 0.2);
+        }
+
+        .quiz-option:disabled {
+            cursor: not-allowed;
+        }
+
+        .quiz-option.correct {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+
+        .quiz-option.incorrect {
+            background-color: #f44336;
+            color: white;
+            border-color: #f44336;
+        }
+
+        .quiz-explanation {
+            background-color: white;
+            border-left: 5px solid #E67E22;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            font-style: italic;
+            color: #666;
+            font-size: 1.05rem;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .quiz-next-button {
+            margin-top: 1rem;
+        }
+
+        .quiz-finish {
+            text-align: center;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .quiz-finish h3 {
+            font-family: 'Georgia', serif;
+            font-size: 2rem;
+            color: #E67E22;
+            margin-bottom: 1rem;
+        }
+
+        .quiz-finish p {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .quiz-progress {
+            font-size: 0.95rem;
+            color: #999;
+            margin-top: 1rem;
+        }
+
         /* FINAL */
         .final {
             background-color: #FFF3E6;
@@ -695,7 +800,26 @@
         </div>
     </section>
 
-    <!-- SEÇÃO 5: FINAL -->
+    <!-- SEÇÃO 5: QUIZ -->
+    <section class="quiz">
+        <div class="content observe">
+            <h2>Quiz de Nós</h2>
+            <p style="margin-bottom: 2rem; font-style: italic;">Vamos jogar em ligação? 💕</p>
+
+            <div class="quiz-container" id="quizContainer">
+                <div class="quiz-question" id="quizQuestion"></div>
+                <div class="quiz-options" id="quizOptions"></div>
+                <div id="quizExplanation"></div>
+                <button class="button quiz-next-button" id="nextButton" onclick="nextQuestion()" style="display: none;">Próxima pergunta</button>
+                <div class="quiz-progress" id="quizProgress"></div>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 2rem;">
+            <button class="button" onclick="scrollToSection(5)">Próximo ↓</button>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 6: FINAL -->
     <section class="final">
         <div class="content observe">
             <h2>Você é...</h2>
@@ -951,6 +1075,127 @@
 
         // Inicializar contador ao carregar
         window.addEventListener('load', initMissCounter);
+
+        // QUIZ
+        const quizQuestions = [
+            {
+                pergunta: "Qual é a cor preferida da Ingrid?",
+                opcoes: ["Laranja", "Azul", "Verde", "Rosa"],
+                resposta: 0,
+                explicacao: "Óbvio. A cor do sol."
+            },
+            {
+                pergunta: "Qual é o apelido que o Daniel mais usa pra Ingrid?",
+                opcoes: ["Sol", "Vida", "Amor", "Flor"],
+                resposta: 0,
+                explicacao: "Porque ela esquenta e ilumina tudo."
+            },
+            {
+                pergunta: "O que a Ingrid mais gosta de comer quando tá com o Daniel?",
+                opcoes: ["Manga", "Pizza", "Açaí", "Hambúrguer"],
+                resposta: 0,
+                explicacao: "Ela sempre fala que tá bom e ele não acredita."
+            },
+            {
+                pergunta: "Qual estação a Ingrid mais parece?",
+                opcoes: ["Verão", "Inverno", "Outono", "Primavera"],
+                resposta: 0,
+                explicacao: "Ela é meio verão, meio outono."
+            },
+            {
+                pergunta: "Onde foi a primeira foto deles juntos?",
+                opcoes: ["Na praia", "Na casa dela", "Em Niterói", "No parque"],
+                resposta: 2,
+                explicacao: "Niterói marca o começo da história de vocês."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let answered = false;
+
+        function initQuiz() {
+            currentQuestionIndex = 0;
+            answered = false;
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (currentQuestionIndex >= quizQuestions.length) {
+                showFinish();
+                return;
+            }
+
+            const question = quizQuestions[currentQuestionIndex];
+            answered = false;
+
+            // Mostrar pergunta
+            document.getElementById('quizQuestion').innerHTML = question.pergunta;
+
+            // Mostrar opções
+            const optionsContainer = document.getElementById('quizOptions');
+            optionsContainer.innerHTML = '';
+
+            question.opcoes.forEach((opcao, index) => {
+                const button = document.createElement('button');
+                button.className = 'quiz-option';
+                button.textContent = opcao;
+                button.onclick = () => answerQuestion(index, question.resposta, question.explicacao);
+                optionsContainer.appendChild(button);
+            });
+
+            // Limpar explicação
+            document.getElementById('quizExplanation').innerHTML = '';
+            document.getElementById('nextButton').style.display = 'none';
+
+            // Mostrar progresso
+            document.getElementById('quizProgress').textContent = `Pergunta ${currentQuestionIndex + 1} de ${quizQuestions.length}`;
+        }
+
+        function answerQuestion(selected, correct, explanation) {
+            if (answered) return;
+            answered = true;
+
+            const options = document.querySelectorAll('.quiz-option');
+
+            // Desabilitar todos os botões
+            options.forEach(btn => btn.disabled = true);
+
+            // Mostrar resposta correta e incorreta
+            options.forEach((btn, index) => {
+                if (index === correct) {
+                    btn.classList.add('correct');
+                } else if (index === selected && index !== correct) {
+                    btn.classList.add('incorrect');
+                }
+            });
+
+            // Mostrar explicação
+            const explanationDiv = document.getElementById('quizExplanation');
+            explanationDiv.innerHTML = `<div class="quiz-explanation">${explanation}</div>`;
+
+            // Mostrar botão próxima
+            document.getElementById('nextButton').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            showQuestion();
+        }
+
+        function showFinish() {
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = `
+                <div class="quiz-finish">
+                    <h3>Vocês terminaram! 🎉</h3>
+                    <p style="font-size: 1.3rem; color: #E67E22; font-style: italic;">Agora vocês podem comparar as respostas por ligação e descobrir quem acertou mais!</p>
+                    <p>Mas o importante é que vocês fizeram isso juntos. 💕</p>
+                    <button class="button" onclick="initQuiz()" style="margin-top: 1.5rem;">Jogar novamente</button>
+                </div>
+            `;
+        }
+
+        // Inicializar quiz quando a página carregar
+        window.addEventListener('load', initQuiz);
 
         // Função para scroll suave entre seções
         function scrollToSection(index) {
