@@ -886,6 +886,8 @@
                 <div class="miss-counter">
                     Você já apertou <strong id="clickCount">0</strong> vezes.<br>
                     Eu senti saudade <strong id="feelCount">0</strong> vezes também.
+                    <br><br>
+                    <button onclick="resetCounter()" style="font-size: 0.8rem; padding: 0.4rem 0.8rem; background: #ccc; color: #333; border: none; border-radius: 20px; cursor: pointer;">Reset</button>
                 </div>
             </div>
         </div>
@@ -1129,6 +1131,13 @@
             clickCount = parseInt(localStorage.getItem('missClicks') || '0');
             document.getElementById('clickCount').textContent = clickCount;
             document.getElementById('feelCount').textContent = clickCount;
+        }
+
+        function resetCounter() {
+            localStorage.removeItem('missClicks');
+            clickCount = 0;
+            document.getElementById('clickCount').textContent = '0';
+            document.getElementById('feelCount').textContent = '0';
         }
 
         function showMissageMessage() {
